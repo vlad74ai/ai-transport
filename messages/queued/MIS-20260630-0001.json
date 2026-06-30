@@ -1,0 +1,33 @@
+{
+  "mission_id": "MIS-20260630-0001",
+  "created_at": "2026-06-30T14:45:00Z",
+  "created_by": "Claude (manual test)",
+  "status": "QUEUED",
+  "priority": "NORMAL",
+  "source": {
+    "type": "manual_test",
+    "reference": "PLATFORM_STATUS-reconfirmation-2026-06-30"
+  },
+  "request": {
+    "title": "Реальная проверка Coordination Layer MVP",
+    "description": "Тестовый Mission для подтверждения что queued -> processing -> completed реально работает на физическом репозитории ai-transport, не только в теории.",
+    "expected_output": "Markdown report"
+  },
+  "routing": {
+    "strategy": "capability",
+    "required_capabilities": ["knowledge_synthesis"],
+    "selected_executor": null
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": ["10_DECISIONS/ADR-016_Coordination-Layer-MVP-Spec.md"]
+  },
+  "commands": [],
+  "result": null,
+  "audit": {
+    "history": [
+      {"event": "CREATED", "timestamp": "2026-06-30T14:45:00Z", "actor": "Claude"}
+    ]
+  }
+}
