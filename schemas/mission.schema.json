@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "ai-transport/schemas/mission.schema.json",
+  "title": "Mission",
+  "description": "Schema for Mission files in ai-transport. Extended per ADR-030 (Controlled Full-Mesh Transport Access) to support multi-writer access: owner, hop_count, classification. A write that fails this schema must be rejected at commit and routed to messages/dead-letter/ with reason SCHEMA_INVALID (ADR-030 §3.4).",
+  "type": "object",
+  "required": [
+    "mission_id",
+    "correlation_id",
+    "created_at",
+    "created_by",
+    "status",
+    "classification",
+    "owner",
+    "hop_count",
+    "routing",
+    "audit"
+  ],
+  "properties": {
+    "mission_id": {
+      "type": "string",
+      "description": "Unique Mission identifier, e.g. MIS-YYYYMMDD-NNNN."
+    },
+    "correlation_id": {
+      "type": "string",
+      "description": "Correlation-ID per ADR-011 — links all messages belonging to one Mission. Defaults to mission_id if not otherwise assigned."
+    },
+    "created_at": { "type": "string", "format": "date-time" },
+    "created_by": {
+      "type": "string",
+      "description": "Orchestra participant that created the Mission: Claude | ChatGPT | Gemini | Grok | Perplexity | Vlad."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["QUEUED", "PROCESSING", "COMPLETED", "DEAD_LETTER"]
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["PUBLIC", "INTERNAL", "CONFIDENTIAL", "RESTRICTED"],
+      "description": "Per ADR-011. Public transport (this repo) accepts only PUBLIC and INTERNAL. CONFIDENTIAL/RESTRICTED must never be written here."
+    },
+    "owner": {
+      "type": "string",
+      "description": "ADR-030 §3.1 Mission Ownership Lock. The single Orchestra participant currently holding write-ownership of this Mission. Only the owner may mutate or move this file. Handoff (changing this field) is itself a write against the Mission, never an implicit side-effect.",
+      "enum": ["Claude", "ChatGPT", "Gemini", "Grok", "Perplexity"]
+    },
+    "hop_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "ADR-030 §3.2 Hop Limit. Incremented by 1 on every ownership handoff between participants. Must never exceed TRANSPORT_CONFIG.json's max_hops. On exceeding: move to messages/dead-letter/ with reason LOOP_SUSPECTED, do not retry silently."
+    },
+    "priority": {
+      "type": "string",
+      "enum": ["LOW", "NORMAL", "HIGH", "CRITICAL"]
+    },
+    "routing": {
+      "type": "object",
+      "required": ["strategy", "selected_executor"],
+      "properties": {
+        "strategy": { "type": "string" },
+        "required_capabilities": { "type": "array", "items": { "type": "string" } },
+        "selected_executor": { "type": "string" }
+      }
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "expected_output": { "type": "string" }
+      }
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "project": { "type": "string" },
+        "attachments": { "type": "array" },
+        "knowledge_refs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "commands": { "type": "array" },
+    "result": { "type": "object" },
+    "audit": {
+      "type": "object",
+      "required": ["history"],
+      "description": "ADR-030 §3.3 Universal Audit Obligation. Every write to this Mission by any participant must append an entry here. A write with no corresponding audit entry is not recognized as valid under ADR-030.",
+      "properties": {
+        "history": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["event", "timestamp", "actor"],
+            "properties": {
+              "event": { "type": "string" },
+              "timestamp": { "type": "string", "format": "date-time" },
+              "actor": { "type": "string" },
+              "detail": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
