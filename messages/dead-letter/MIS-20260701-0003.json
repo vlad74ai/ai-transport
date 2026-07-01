@@ -1,0 +1,41 @@
+{
+  "mission_id": "MIS-20260701-0003",
+  "correlation_id": "MIS-20260701-0003",
+  "created_at": "2026-07-01T15:10:00Z",
+  "created_by": "Claude",
+  "status": "DEAD_LETTER",
+  "classification": "INTERNAL",
+  "owner": "Claude",
+  "hop_count": 8,
+  "dead_letter_reason": "LOOP_SUSPECTED",
+  "hop_limit_violation": {
+    "max_hops": 8,
+    "attempted_hop_count": 9,
+    "explanation": "Mission simulated as having already reached hop_count=8 (TRANSPORT_CONFIG.json max_hops) through 8 prior synthetic handoffs. A 9th handoff was attempted (Claude -> ChatGPT), which would increment hop_count to 9, exceeding max_hops. Per GOVERNANCE.md §4, the handoff was refused and the Mission was routed to dead-letter/ with hop_count frozen at the last valid value (8), not incremented to the violating value."
+  },
+  "priority": "NORMAL",
+  "routing": {
+    "strategy": "capability",
+    "required_capabilities": ["knowledge_synthesis"],
+    "selected_executor": "Claude"
+  },
+  "request": {
+    "title": "ADR-030 Hop Limit test — simulated loop",
+    "description": "Synthetic test: Mission constructed already at hop_count = max_hops to exercise the LOOP_SUSPECTED dead-letter path without needing 8 real cross-participant handoffs. Confirms the refusal-to-increment-past-ceiling logic (ADR-030 §3.2) is followable in practice.",
+    "expected_output": "Mission lands in dead-letter/ with reason LOOP_SUSPECTED, hop_count not incremented past max_hops."
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": ["10_DECISIONS/ADR-030_Controlled-Full-Mesh-Transport-Access.md", "TRANSPORT_CONFIG.json"]
+  },
+  "commands": [],
+  "audit": {
+    "history": [
+      {"event": "CREATED", "timestamp": "2026-07-01T15:10:00Z", "actor": "Claude", "detail": "Constructed pre-set to hop_count=8 (=max_hops) for test purposes, not via 8 real handoffs"},
+      {"event": "HANDOFF_ATTEMPTED", "timestamp": "2026-07-01T15:10:00Z", "actor": "Claude", "detail": "Simulated handoff to ChatGPT would set hop_count=9 > max_hops=8"},
+      {"event": "HANDOFF_REFUSED", "timestamp": "2026-07-01T15:10:00Z", "actor": "Claude", "detail": "hop_count not incremented; owner unchanged"},
+      {"event": "DEAD_LETTERED", "timestamp": "2026-07-01T15:10:00Z", "actor": "Claude", "detail": "reason=LOOP_SUSPECTED"}
+    ]
+  }
+}
