@@ -1,6 +1,6 @@
 {
   "_comment": "Platform/deployment constants for ai-transport, owned by Platform Governance (Vlad) per ADR-022 §10 Policy Ownership. No Process may modify its own Policy. Introduced by ADR-030 (Controlled Full-Mesh Transport Access).",
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "last_updated": "2026-07-01",
   "max_hops": 8,
   "max_hops_rationale": "ADR-030 §3.2: deliberately NOT derived from current participant count (5). Independent platform constant, tunable without redefining loop-protection every time Orchestra gains or loses a participant.",
@@ -19,9 +19,9 @@
   "participants_with_physical_access": {
     "Claude": "GitHub MCP - LIVE",
     "Grok": "GitHub App (scoped to this repo) - LIVE since 2026-07-01",
-    "ChatGPT": "STRUCTURALLY LIMITED - native connector is READ-ONLY (write requires Codex, a separate product). See PERP research 2026-07-01.",
-    "Gemini": "NOT AVAILABLE on consumer tier - no persistent connector, only ephemeral single-chat repo import (5000 files/100MB cap). Persistent connector exists only in Gemini Enterprise (separate Google Cloud product). See PERP research 2026-07-01.",
-    "Perplexity": "NOT AVAILABLE on current (Free) tier - GitHub connector is a Pro/Max/Enterprise feature, absent from Connectors settings on Free. See PERP research 2026-07-01."
+    "ChatGPT": "STRUCTURALLY LIMITED - native connector is READ-ONLY (write requires Codex, a separate product). See RESEARCH_Model-GitHub-Connectivity_2026-07-01.md.",
+    "Gemini": "NOT APPLICABLE BY ROLE, not a gap - Gemini is Workspace Integrator (AI_CAPABILITY_REGISTRY.md), not a transport Mission executor. Its access path is Google Drive -> the Base (read-only per ADR-003 Single Writer Principle, regardless of Drive auth status), a separate system from ai-transport. Decided 2026-07-01 (Vlad): do not pursue ai-transport write access for Gemini.",
+    "Perplexity": "NOT AVAILABLE on current (Free) tier - GitHub connector is a Pro/Max/Enterprise feature, absent from Connectors settings on Free. See RESEARCH_Model-GitHub-Connectivity_2026-07-01.md."
   },
-  "access_note": "Revised 2026-07-01 after Perplexity research: the ADR-030 assumption of symmetric full-mesh access across all 5 participants does NOT hold natively for ChatGPT and Gemini regardless of provisioning effort - these are product-level constraints (read-only connector / no persistent connector on consumer tier), not a 'not yet configured' gap. Perplexity's gap is tier-based (Free lacks the feature; Pro/Max/Enterprise reportedly has it, exact repo-scoping unconfirmed in public docs). Closing these gaps requires either a different product/environment per model (Codex for ChatGPT write access, Gemini Enterprise for Gemini, a paid tier for Perplexity) or a custom bridge (n8n/API) built and maintained by us - not a settings toggle."
+  "access_note": "Revised 2026-07-01. Of the original ADR-030 full-mesh assumption: Grok - LIVE (GitHub App). Gemini - reclassified as not applicable, its role doesn't require transport write access; the Base-via-Drive question is separate and unaffected by this. ChatGPT - structurally read-only in its native connector; write would require adopting Codex as a separate workflow, not decided. Perplexity - tier-gated, would need a paid upgrade to even test; exact repo-scoping still unconfirmed in public docs."
 }
