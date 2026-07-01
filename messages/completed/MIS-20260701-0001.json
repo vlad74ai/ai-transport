@@ -1,0 +1,51 @@
+{
+  "mission_id": "MIS-20260701-0001",
+  "correlation_id": "MIS-20260701-0001",
+  "created_at": "2026-07-01T14:50:00Z",
+  "created_by": "Claude",
+  "status": "COMPLETED",
+  "classification": "INTERNAL",
+  "owner": "Claude",
+  "hop_count": 0,
+  "priority": "NORMAL",
+  "routing": {
+    "strategy": "capability",
+    "required_capabilities": ["knowledge_synthesis"],
+    "selected_executor": "Claude"
+  },
+  "request": {
+    "title": "ADR-030 schema live test",
+    "description": "Single-writer test Mission exercising the ADR-030 schema fields (owner, hop_count, classification, correlation_id) through the real queued -> processing -> completed cycle on vlad74ai/ai-transport. Not a multi-writer/handoff test (no second live Orchestra participant in this session) — that remains untested.",
+    "expected_output": "Mission reaches completed/ with schema-valid fields intact at every step."
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": ["10_DECISIONS/ADR-030_Controlled-Full-Mesh-Transport-Access.md", "schemas/mission.schema.json"]
+  },
+  "commands": [
+    {
+      "command_id": "CMD-001",
+      "type": "EXECUTE",
+      "target": "Claude",
+      "status": "COMPLETED",
+      "payload": {"mission_id": "MIS-20260701-0001"},
+      "created_at": "2026-07-01T14:51:00Z",
+      "started_at": "2026-07-01T14:51:00Z",
+      "completed_at": "2026-07-01T14:52:00Z",
+      "result": "New ADR-030 schema fields (owner, hop_count, classification, correlation_id) survived a full queued->processing->completed cycle on the real ai-transport repo, verified by read-back after each write. Single-writer only — no cross-participant handoff, hop_count increment, loop-limit trigger, or schema-rejection path was exercised. Status: single-writer schema test PASSED. Multi-writer scenario still UNTESTED."
+    }
+  ],
+  "result": {
+    "artifact": "ADR-030 schema (schemas/mission.schema.json) confirmed usable in a real Mission lifecycle.",
+    "executor": "Claude",
+    "completed_at": "2026-07-01T14:52:00Z"
+  },
+  "audit": {
+    "history": [
+      {"event": "CREATED", "timestamp": "2026-07-01T14:50:00Z", "actor": "Claude"},
+      {"event": "MOVED_TO_PROCESSING", "timestamp": "2026-07-01T14:51:00Z", "actor": "Claude", "detail": "owner=Claude unchanged, hop_count=0 unchanged (no handoff occurred)"},
+      {"event": "COMPLETED", "timestamp": "2026-07-01T14:52:00Z", "actor": "Claude", "detail": "Schema fields validated end-to-end, single-writer only"}
+    ]
+  }
+}
