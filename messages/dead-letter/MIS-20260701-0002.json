@@ -1,0 +1,37 @@
+{
+  "mission_id": "MIS-20260701-0002",
+  "correlation_id": "MIS-20260701-0002",
+  "created_at": "2026-07-01T15:05:00Z",
+  "created_by": "Claude",
+  "status": "DEAD_LETTER",
+  "classification": "INTERNAL",
+  "hop_count": 0,
+  "dead_letter_reason": "SCHEMA_INVALID",
+  "schema_violation": {
+    "missing_required_field": "owner",
+    "explanation": "Original write attempt omitted the 'owner' field, required by schemas/mission.schema.json since ADR-030. Per GOVERNANCE.md §2, a write failing schema validation must never enter messages/queued/ — it is routed here instead."
+  },
+  "priority": "NORMAL",
+  "routing": {
+    "strategy": "capability",
+    "required_capabilities": ["knowledge_synthesis"],
+    "selected_executor": "Claude"
+  },
+  "request": {
+    "title": "ADR-030 Schema Gate test — deliberately invalid Mission",
+    "description": "This Mission was intentionally constructed without the required 'owner' field to exercise the SCHEMA_INVALID dead-letter path end-to-end. It was never written to messages/queued/ — it exists only here, in dead-letter/, from the moment of creation.",
+    "expected_output": "Confirms the dead-letter/SCHEMA_INVALID mechanism (ADR-030 §3.4) is followable in practice, not just documented."
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": ["10_DECISIONS/ADR-030_Controlled-Full-Mesh-Transport-Access.md", "schemas/mission.schema.json"]
+  },
+  "commands": [],
+  "audit": {
+    "history": [
+      {"event": "VALIDATION_FAILED", "timestamp": "2026-07-01T15:05:00Z", "actor": "Claude", "detail": "Checked draft against schemas/mission.schema.json before writing to queued/. Missing required field: owner. Routed directly to dead-letter/."},
+      {"event": "DEAD_LETTERED", "timestamp": "2026-07-01T15:05:00Z", "actor": "Claude", "detail": "reason=SCHEMA_INVALID"}
+    ]
+  }
+}
