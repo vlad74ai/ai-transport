@@ -1,0 +1,32 @@
+{
+  "mission_id": "MIS-20260701-0001",
+  "correlation_id": "MIS-20260701-0001",
+  "created_at": "2026-07-01T14:50:00Z",
+  "created_by": "Claude",
+  "status": "QUEUED",
+  "classification": "INTERNAL",
+  "owner": "Claude",
+  "hop_count": 0,
+  "priority": "NORMAL",
+  "routing": {
+    "strategy": "capability",
+    "required_capabilities": ["knowledge_synthesis"],
+    "selected_executor": "Claude"
+  },
+  "request": {
+    "title": "ADR-030 schema live test",
+    "description": "Single-writer test Mission exercising the ADR-030 schema fields (owner, hop_count, classification, correlation_id) through the real queued -> processing -> completed cycle on vlad74ai/ai-transport. Not a multi-writer/handoff test (no second live Orchestra participant in this session) — that remains untested.",
+    "expected_output": "Mission reaches completed/ with schema-valid fields intact at every step."
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": ["10_DECISIONS/ADR-030_Controlled-Full-Mesh-Transport-Access.md", "schemas/mission.schema.json"]
+  },
+  "commands": [],
+  "audit": {
+    "history": [
+      {"event": "CREATED", "timestamp": "2026-07-01T14:50:00Z", "actor": "Claude"}
+    ]
+  }
+}
