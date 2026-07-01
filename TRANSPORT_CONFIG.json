@@ -1,0 +1,27 @@
+{
+  "_comment": "Platform/deployment constants for ai-transport, owned by Platform Governance (Vlad) per ADR-022 §10 Policy Ownership. No Process may modify its own Policy. Introduced by ADR-030 (Controlled Full-Mesh Transport Access).",
+  "schema_version": "1.0",
+  "last_updated": "2026-07-01",
+  "max_hops": 8,
+  "max_hops_rationale": "ADR-030 §3.2: deliberately NOT derived from current participant count (5). Independent platform constant, tunable without redefining loop-protection every time Orchestra gains or loses a participant.",
+  "circuit_breaker": {
+    "max_writes": 20,
+    "window_minutes": 10,
+    "on_trigger": "Suspend all new writes platform-wide, notify Vlad. Provisional values (ADR-030 §3.5) — not yet tuned against real usage.",
+    "status": "DESIGNED_NOT_ENFORCED",
+    "enforcement_note": "No automated monitor currently reads this file. Enforcement requires either a GitHub Action or an n8n workflow watching write volume; neither exists yet. Until one does, this section is a declared intent, not a live control."
+  },
+  "dead_letter_reasons": {
+    "LOOP_SUSPECTED": "hop_count exceeded max_hops (ADR-030 §3.2)",
+    "SCHEMA_INVALID": "write failed schemas/mission.schema.json validation at commit time (ADR-030 §3.4)"
+  },
+  "orchestra_participants": ["Claude", "ChatGPT", "Gemini", "Grok", "Perplexity"],
+  "participants_with_physical_access": {
+    "Claude": "GitHub MCP - LIVE",
+    "Grok": "GitHub MCP - LIVE",
+    "ChatGPT": "NOT YET PROVISIONED",
+    "Gemini": "NOT YET PROVISIONED",
+    "Perplexity": "NOT YET PROVISIONED"
+  },
+  "access_note": "ADR-030 authorizes full-mesh access for all 5. Physical provisioning for ChatGPT/Gemini/Perplexity is a separate, unfinished step (platform/account-level setup on each of those services), not something writable from this repo alone."
+}
