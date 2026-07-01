@@ -1,0 +1,47 @@
+{
+  "mission_id": "MIS-20260701-0004",
+  "correlation_id": "MIS-20260701-0004",
+  "created_at": "2026-07-01T15:15:00Z",
+  "created_by": "Claude",
+  "status": "QUEUED",
+  "classification": "INTERNAL",
+  "owner": "Claude",
+  "hop_count": 0,
+  "priority": "NORMAL",
+  "routing": {
+    "strategy": "explicit",
+    "required_capabilities": ["technical_execution"],
+    "selected_executor": "Grok"
+  },
+  "request": {
+    "title": "ADR-030 real multi-writer handoff test",
+    "description": "First genuine cross-participant test of Mission Ownership Lock (ADR-030 §3.1) and Hop Limit (§3.2). Instructions for Grok: 1) Read this file. 2) Rewrite it with owner changed from 'Claude' to 'Grok' and hop_count incremented from 0 to 1 — this write IS the handoff, do it as an explicit action, not a side effect. 3) Append an audit.history entry for the handoff (event=HANDOFF, actor=Grok). 4) Move the file: write to messages/processing/MIS-20260701-0004.json, delete from messages/queued/. 5) Do the actual work below. 6) Move to messages/completed/, delete from processing/, set owner back to 'Claude', hop_count to 2, append a final HANDOFF audit entry (actor=Grok, detail='returning to Claude').",
+    "actual_task": "Confirm github:delete_file and github:write_file both still work reliably from your side against vlad74ai/ai-transport (per PLATFORM_STATUS.md, this was last confirmed 2026-06-30). Report any errors in the result field.",
+    "expected_output": "Mission reaches messages/completed/ with hop_count=2, owner='Claude', and a real (not synthetic) handoff trail in audit.history — the first genuine multi-writer evidence for ADR-030."
+  },
+  "context": {
+    "project": "AI Orchestra",
+    "attachments": [],
+    "knowledge_refs": [
+      "10_DECISIONS/ADR-030_Controlled-Full-Mesh-Transport-Access.md",
+      "GOVERNANCE.md",
+      "schemas/mission.schema.json",
+      "TRANSPORT_CONFIG.json"
+    ]
+  },
+  "commands": [
+    {
+      "command_id": "CMD-001",
+      "type": "EXECUTE",
+      "target": "Grok",
+      "status": "QUEUED",
+      "payload": {"mission_id": "MIS-20260701-0004"},
+      "created_at": "2026-07-01T15:15:00Z"
+    }
+  ],
+  "audit": {
+    "history": [
+      {"event": "CREATED", "timestamp": "2026-07-01T15:15:00Z", "actor": "Claude", "detail": "Created for Grok pickup. owner intentionally left as Claude (creator) until Grok performs the explicit handoff write per ADR-030 §3.1 — Grok must not skip this step even though it is the addressed executor."}
+    ]
+  }
+}
