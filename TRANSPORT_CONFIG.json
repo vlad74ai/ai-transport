@@ -1,6 +1,6 @@
 {
   "_comment": "Platform/deployment constants for ai-transport, owned by Platform Governance (Vlad) per ADR-022 §10 Policy Ownership. No Process may modify its own Policy. Introduced by ADR-030 (Controlled Full-Mesh Transport Access).",
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "last_updated": "2026-07-01",
   "max_hops": 8,
   "max_hops_rationale": "ADR-030 §3.2: deliberately NOT derived from current participant count (5). Independent platform constant, tunable without redefining loop-protection every time Orchestra gains or loses a participant.",
@@ -18,10 +18,10 @@
   "orchestra_participants": ["Claude", "ChatGPT", "Gemini", "Grok", "Perplexity"],
   "participants_with_physical_access": {
     "Claude": "GitHub MCP - LIVE",
-    "Grok": "GitHub MCP - LIVE",
-    "ChatGPT": "NOT YET PROVISIONED",
-    "Gemini": "NOT YET PROVISIONED",
-    "Perplexity": "NOT YET PROVISIONED"
+    "Grok": "GitHub App (scoped to this repo) - LIVE since 2026-07-01",
+    "ChatGPT": "STRUCTURALLY LIMITED - native connector is READ-ONLY (write requires Codex, a separate product). See PERP research 2026-07-01.",
+    "Gemini": "NOT AVAILABLE on consumer tier - no persistent connector, only ephemeral single-chat repo import (5000 files/100MB cap). Persistent connector exists only in Gemini Enterprise (separate Google Cloud product). See PERP research 2026-07-01.",
+    "Perplexity": "NOT AVAILABLE on current (Free) tier - GitHub connector is a Pro/Max/Enterprise feature, absent from Connectors settings on Free. See PERP research 2026-07-01."
   },
-  "access_note": "ADR-030 authorizes full-mesh access for all 5. Physical provisioning for ChatGPT/Gemini/Perplexity is a separate, unfinished step (platform/account-level setup on each of those services), not something writable from this repo alone."
+  "access_note": "Revised 2026-07-01 after Perplexity research: the ADR-030 assumption of symmetric full-mesh access across all 5 participants does NOT hold natively for ChatGPT and Gemini regardless of provisioning effort - these are product-level constraints (read-only connector / no persistent connector on consumer tier), not a 'not yet configured' gap. Perplexity's gap is tier-based (Free lacks the feature; Pro/Max/Enterprise reportedly has it, exact repo-scoping unconfirmed in public docs). Closing these gaps requires either a different product/environment per model (Codex for ChatGPT write access, Gemini Enterprise for Gemini, a paid tier for Perplexity) or a custom bridge (n8n/API) built and maintained by us - not a settings toggle."
 }
